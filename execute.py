@@ -7,10 +7,39 @@ import sys
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 
-def getWordsAndInsert(search_word,search_short_defn,mnemonics,def_arr,def_dict):
-    pass
+
+
+
+
+def getWordsAndInsert(word, searchShortDefn, mnemonics, defArr, defDict):
+
+    word = str(word)
+    searchShortDefn = str(searchShortDefn)
+    mnemonics = str(mnemonics)
+    defArr = str(defArr)
+    defDict = str(defDict)
+
+    query = QSqlQuery()
+
+    #establish placeholders for the data, these placeholders we fill in through bindValue()
+    query.prepare("""INSERT INTO dictin (word, searchShortDefn, mnemonics, defArr, defDict)
+            VALUES (:word, :searchShortDefn, :mnemonics, :defArr, :defDict)""")
+
+    query.bindValue(":word", word)
+    query.bindValue(":searchShortDefn", searchShortDefn)
+    query.bindValue(":mnemonics", mnemonics)
+    query.bindValue(":defArr", defArr)
+    query.bindValue(":defDict", defDict)
+
+    if query.exec_():
+        print("Successful")
+    else:
+        print("Error: ", query.lastError().text())
+
+
 
 def scrapPage(pageNo):
+
     url = "http://www.mnemonicdictionary.com/wordlist/GREwordlist?page="+str(pageNo)
     req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
     web_byte = urlopen(req).read()
@@ -88,34 +117,26 @@ def scrapPage(pageNo):
                             dict['sent'] = sent_arr
 
             getWordsAndInsert(search_word,search_short_defn,mnemonics,def_arr,def_dict)
+            #print(search_word ,"\n",search_short_defn, "\n",mnemonics, "\n",def_arr, "\n",def_dict)
 
             tot = tot + 1
 
+
+
+
+
+
 def scrapPages():
-    scrapPage(1)
+
+    print(query.exec_("CREATE TABLE dictin(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+                      "word varchar(100), searchShortDefn varchar(300),mnemonics varchar(500), "
+                      "defArr varchar(500), defDict varchar(500))"))
+
+    for i in range(1,2):
+        scrapPage(i)
 
 
-def createDB():
-
-
-
-
-
-
-
-    query = QSqlQuery()
-
-    query.exec_("create table sportsmen(id int primary key, "
-                "word varchar(100), defination varchar(300), synonyms varchar(200),"
-                "example varchar(200)")
-
-
-    start = webpage.index("<h2>")
-    stop = webpage.index("</h2>")
-    word=webpage[start:stop]
-    print(word)
-
-    if query.exec_("SELECT * FROM sportsmen"):
+    if query.exec_("SELECT * FROM dictin"):
         rec = query.record()
         while query.next():
             for ix in range(rec.count()):
@@ -123,17 +144,17 @@ def createDB():
                 print(rec.fieldName(ix), val)
     else:
         print(query.lastError().text())
-    return True
-
-
-
 
 
 
 app = QApplication(sys.argv)
 db = QSqlDatabase.addDatabase('QSQLITE')
-db.setDatabaseName('sports.db')
-db.open()
+db.setDatabaseName('dictionary.db')
+if not db.open():
+    QMessageBox.critical(None,("Cannot open database"),QMessageBox.Cancel)
+query = QSqlQuery()
 
-scrapPage(1)
+scrapPages()
+
+
 
