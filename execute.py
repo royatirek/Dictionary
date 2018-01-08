@@ -1,4 +1,5 @@
 from PyQt4.QtGui import *
+
 site_pack_path = "C:\\Python34\\Lib\\site-packages"
 QApplication.addLibraryPath('{0}\\PyQt4\\plugins'.format(site_pack_path))
 from PyQt4.QtSql import *
@@ -7,12 +8,11 @@ import sys
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
 import mainWindow_ui
-
+from PerWordWindow import PerWordDisplay
 
 
 # This  is how python inherits
-class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow):
-
+class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
     # class or instance variable
 
     db = QSqlDatabase.addDatabase('QSQLITE')
@@ -32,6 +32,29 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow):
         self.showWords()
         # when search button is clicked
         self.pushButton.clicked.connect(self.showSearchedWord)
+        self.listWidget.doubleClicked.connect(self.getPerWordDisplay)
+
+    def getPerWordDisplay(self, item):
+        # type of the item  is QModelIndex
+        currentRow = item.data()
+        endOfWord = currentRow.index(" ")
+        # wordClicked returns the word that is being clicked
+        wordClicked = currentRow[:endOfWord]
+        self.query.prepare("""SELECT * FROM dictin WHERE word=:word""")
+
+        self.query.bindValue(":word", wordClicked)
+
+        if self.query.exec_():
+            print("Successful")
+        else:
+            print("Error: ", self.query.lastError().text())
+
+        rec = self.query.record()
+        self.query.next()
+
+        perWordObject = PerWordDisplay(self.query.value(1), self.query.value(2), self.query.value(3),
+                                       self.query.value(4), self.query.value(5))
+        perWordObject.exec_()
 
     def showSearchedWord(self):
         self.listWidget.clear()
@@ -41,70 +64,104 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow):
             while self.query.next():
                 # rec.counts() returns no of columns in database
                 for ix in range(1):
-                    wordSearched=self.query.value(1)
+                    wordSearched = self.query.value(1)
                     if search_term in wordSearched:
-                        val = wordSearched +"   ---    "+self.query.value(2)
+                        val = wordSearched + "   ---    " + self.query.value(2)
                         print(rec.fieldName(1), val)
                         self.listWidget.addItem(val)
 
         else:
             print(self.query.lastError().text())
 
-
     def showWords(self):
+
         if self.query.exec_("SELECT * FROM dictin"):
             rec = self.query.record()
             while self.query.next():
                 # rec.counts returns no of columns in database
                 for ix in range(1):
-                    val = self.query.value(1)+"   ---    "+self.query.value(2)
+                    val = self.query.value(1) + "   ---    " + self.query.value(2)
                     print(rec.fieldName(1), val)
                     self.listWidget.addItem(val)
 
         else:
             print(self.query.lastError().text())
 
-
-
-
-
-
-
-    def getWordsAndInsert(self,word, searchShortDefn, mnemonics, defArr, defDict):
+    def getWordsAndInsert(self, word, searchShortDefn, mnemonics, defArr, defDict):
 
         word = str(word)
         searchShortDefn = str(searchShortDefn)
         mnemonics = str(mnemonics)
-        defArr = str(defArr)
-        defDict = str(defDict)
+        defString=""
+        for i in range(len(defArr)):
+            defString=defString+"<u>Defination</u><br>"
+            defString+=defArr[i]+"<br><br>"
+            print(defArr[i],i)
 
+
+            synList = defDict[i]['syn']
+            noOfSynonymes = len(synList)
+            if (noOfSynonymes > 0):
+                defString += "<u>Synonymes</u><br>"
+            if (noOfSynonymes > 0):
+                for j in range(noOfSynonymes):
+                   defString+=synList[j] + "<br>"
+
+
+
+
+
+            sentenceList = defDict[i]['sent']
+            noOfSentences = len(sentenceList)
+            if (noOfSentences > 0):
+                defString += "<u>Example Sentences</u><br>"
+            if(noOfSentences>0):
+                for j in range(noOfSentences):
+                    defString+=sentenceList[j] + "<br>"
+
+            defString+="<br><hr><br>"
+
+        if mnemonics.index('///')>0:
+            noOfMnemonics=2
+
+
+        defString+="<u>Mnemonics</u><br><br>"
+        start=-3
+        for i in range(noOfMnemonics):
+            stop=mnemonics.index('///',start+3)
+            defString+=mnemonics[start+3:stop]+"<br>"
+            start=stop
+            defString+="<br>"
+
+
+
+
+        print(defString)
         query = QSqlQuery()
 
-        #establish placeholders for the data, these placeholders we fill in through bindValue()
+        # establish placeholders for the data, these placeholders we fill in through bindValue()
         query.prepare("""INSERT INTO dictin (word, searchShortDefn, mnemonics, defArr, defDict)
                 VALUES (:word, :searchShortDefn, :mnemonics, :defArr, :defDict)""")
 
         query.bindValue(":word", word)
         query.bindValue(":searchShortDefn", searchShortDefn)
         query.bindValue(":mnemonics", mnemonics)
-        query.bindValue(":defArr", defArr)
-        query.bindValue(":defDict", defDict)
+        query.bindValue(":defArr",defString)
+        query.bindValue(":defDict",defString)
 
         if query.exec_():
             print("Successful")
         else:
             print("Error: ", query.lastError().text())
 
+    def scrapPage(self, pageNo):
 
-
-    def scrapPage(self,pageNo):
-
-        url = "http://www.mnemonicdictionary.com/wordlist/GREwordlist?page="+str(pageNo)
+        url = "http://www.mnemonicdictionary.com/wordlist/GREwordlist?page=" + str(pageNo)
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         web_byte = urlopen(req).read()
         webpage = web_byte.decode('utf-8')
 
-        #using soup library
+        # using soup library
         soup = BeautifulSoup(webpage, "html.parser")
 
         result = soup.find_all("div", class_="input-append")
@@ -175,37 +232,24 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow):
                                 sent_arr.append(data)
                                 dict['sent'] = sent_arr
 
-                self.getWordsAndInsert(search_word,search_short_defn,mnemonics,def_arr,def_dict)
-                #print(search_word ,"\n",search_short_defn, "\n",mnemonics, "\n",def_arr, "\n",def_dict)
+                self.getWordsAndInsert(search_word, search_short_defn, mnemonics, def_arr, def_dict)
+
+                print(search_word ,"\n",search_short_defn, "\n",mnemonics, "\n",def_arr, "\n",def_dict)
 
                 tot = tot + 1
-
-
-
-
-
 
     def scrapPages(self):
 
         print(self.query.exec_("CREATE TABLE dictin(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-                          "word varchar(100), searchShortDefn varchar(300),mnemonics varchar(500), "
-                          "defArr varchar(500), defDict varchar(500))"))
+                               "word varchar(100), searchShortDefn varchar(300),mnemonics varchar(500), "
+                               "defArr varchar(2000), defDict varchar(500))"))
 
-        for i in range(1,2):
+        for i in range(1, 2):
             self.scrapPage(i)
-
-
-
-
 
 
 app = QApplication(sys.argv)
 
-
 newDict = Dictionary()
 newDict.show()
 app.exec_()
-
-
-
-

@@ -31,9 +31,6 @@ class Ui_Dialog(object):
         self.mainWord.setStyleSheet(_fromUtf8("font: 16pt \"MS Shell Dlg 2\";"))
         self.mainWord.setReadOnly(True)
         self.mainWord.setObjectName(_fromUtf8("mainWord"))
-        self.voice = QtGui.QPushButton(Dialog)
-        self.voice.setGeometry(QtCore.QRect(410, 20, 41, 41))
-        self.voice.setObjectName(_fromUtf8("voice"))
         self.hindi = QtGui.QLineEdit(Dialog)
         self.hindi.setGeometry(QtCore.QRect(10, 70, 351, 41))
         self.hindi.setStyleSheet(_fromUtf8("font: 16pt \"Nirmala UI\";\n"
@@ -56,6 +53,9 @@ class Ui_Dialog(object):
         self.comboBox.addItem(_fromUtf8(""))
         self.comboBox.addItem(_fromUtf8(""))
         self.comboBox.addItem(_fromUtf8(""))
+        self.voice = QtGui.QPushButton(self.frame)
+        self.voice.setGeometry(QtCore.QRect(394, 10, 41, 41))
+        self.voice.setObjectName(_fromUtf8("voice"))
         self.frame_2 = QtGui.QFrame(Dialog)
         self.frame_2.setGeometry(QtCore.QRect(9, 140, 461, 421))
         self.frame_2.setFrameShape(QtGui.QFrame.StyledPanel)
@@ -74,13 +74,13 @@ class Ui_Dialog(object):
     def retranslateUi(self, Dialog):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
         self.mainWord.setText(_translate("Dialog", "DemoWord", None))
-        self.voice.setText(_translate("Dialog", "Voice", None))
         self.hindi.setText(_translate("Dialog", "HindiWord", None))
         self.comboBox.setItemText(0, _translate("Dialog", "Hindi", None))
         self.comboBox.setItemText(1, _translate("Dialog", "Bengali", None))
         self.comboBox.setItemText(2, _translate("Dialog", "Telugu", None))
         self.comboBox.setItemText(3, _translate("Dialog", "Tamil", None))
         self.comboBox.setItemText(4, _translate("Dialog", "Gujarati", None))
+        self.voice.setText(_translate("Dialog", "voice", None))
         self.textEdit.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"

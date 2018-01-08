@@ -32,19 +32,6 @@
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="voice">
-   <property name="geometry">
-    <rect>
-     <x>410</x>
-     <y>20</y>
-     <width>41</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Voice</string>
-   </property>
-  </widget>
   <widget class="QLineEdit" name="hindi">
    <property name="geometry">
     <rect>
@@ -119,6 +106,19 @@
       <string>Gujarati</string>
      </property>
     </item>
+   </widget>
+   <widget class="QPushButton" name="voice">
+    <property name="geometry">
+     <rect>
+      <x>394</x>
+      <y>10</y>
+      <width>41</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>voice</string>
+    </property>
    </widget>
   </widget>
   <widget class="QFrame" name="frame_2">
