@@ -40,6 +40,9 @@
       <height>461</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">font: 10pt &quot;MS Shell Dlg 2&quot;;</string>
+    </property>
     <property name="horizontalScrollBarPolicy">
      <enum>Qt::ScrollBarAlwaysOff</enum>
     </property>
@@ -55,6 +58,9 @@
       <width>421</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
    </widget>
   </widget>

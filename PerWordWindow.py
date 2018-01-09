@@ -37,7 +37,7 @@ class PerWordDisplay(QDialog, dialog_ui.Ui_Dialog):
     def speakMainWord(self):
         """ It uses the win32com module to get the pronunciation of the word"""
         speak = wincl.Dispatch("SAPI.SpVoice")
-        print(type(self.voice))
+        #print(type(self.voice))
         speak.Speak(self._word)
 
     def translate(self):
@@ -48,7 +48,7 @@ class PerWordDisplay(QDialog, dialog_ui.Ui_Dialog):
     def setTextArea(self):
         """ It sets details of the main word"""
         self.textEdit.setHtml(self._defArr)
-        print(self._syn)
+        #print(self._syn)
 
 
 

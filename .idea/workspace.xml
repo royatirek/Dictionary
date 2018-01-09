@@ -1,21 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1464d9d1-1e67-4a0c-be07-19610d09f290" name="Default" comment="Added patch to the error while scraping from using .index method.&#10;Changed the site from where meaning is being scraped.&#10;Added some codes more.&#10;Comment the scrapPages() method after scraping from the website.&#10;App is now fully functional but need some design improvements.">
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/icons.qrc" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/icons.txt" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/mw1.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/mw2.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/mw3.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/splash.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/v1.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/v2.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons/wm4.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/icons_rc.py" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/splash.jpg" />
+    <list default="true" id="1464d9d1-1e67-4a0c-be07-19610d09f290" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/dialog_ui.py" afterPath="$PROJECT_DIR$/dialog_ui.py" />
-      <change beforePath="$PROJECT_DIR$/dialog_ui.ui" afterPath="$PROJECT_DIR$/dialog_ui.ui" />
+      <change beforePath="$PROJECT_DIR$/PerWordWindow.py" afterPath="$PROJECT_DIR$/PerWordWindow.py" />
       <change beforePath="$PROJECT_DIR$/execute.py" afterPath="$PROJECT_DIR$/execute.py" />
       <change beforePath="$PROJECT_DIR$/mainWindow_ui.py" afterPath="$PROJECT_DIR$/mainWindow_ui.py" />
       <change beforePath="$PROJECT_DIR$/mainWindow_ui.ui" afterPath="$PROJECT_DIR$/mainWindow_ui.ui" />
@@ -32,11 +20,31 @@
       <file leaf-file-name="execute.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/execute.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="292">
-              <caret line="314" column="22" lean-forward="true" selection-start-line="314" selection-start-column="22" selection-end-line="314" selection-end-column="22" />
+            <state relative-caret-position="17">
+              <caret line="190" column="46" lean-forward="false" selection-start-line="190" selection-start-column="46" selection-end-line="190" selection-end-column="46" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mainWindow_ui.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mainWindow_ui.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="697">
+              <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="23" selection-end-line="41" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dialog_ui.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dialog_ui.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1054">
+              <caret line="62" column="80" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="80" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -68,8 +76,8 @@
       <list>
         <option value="$PROJECT_DIR$/dialog_ui.py" />
         <option value="$PROJECT_DIR$/PerWordWindow.py" />
-        <option value="$PROJECT_DIR$/mainWindow_ui.py" />
         <option value="$PROJECT_DIR$/execute.py" />
+        <option value="$PROJECT_DIR$/mainWindow_ui.py" />
       </list>
     </option>
   </component>
@@ -94,7 +102,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -106,6 +113,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="Scratches" />
     </panes>
   </component>
@@ -251,7 +259,14 @@
       <option name="project" value="LOCAL" />
       <updated>1515485992720</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added splash Screen but have not implemented progress bar in it&#10;Added icons to the application">
+      <created>1515489680055</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1515489680055</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -261,11 +276,9 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16294643" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="1.0" sideWeight="0.51317716" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.49707174" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32843137" sideWeight="0.48682284" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32843137" sideWeight="0.48682284" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -275,6 +288,8 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection Results" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
@@ -345,7 +360,8 @@
     <MESSAGE value="Now the dictionary can show the whole meaning of the word.&#10;Still translate feature is still not build" />
     <MESSAGE value="Now the dictionary can translate English Words to Hindi and the view of the Dialog has been restructured to show only Hindi word as of now.&#10;DocString has been added for each function used." />
     <MESSAGE value="Added patch to the error while scraping from using .index method.&#10;Changed the site from where meaning is being scraped.&#10;Added some codes more.&#10;Comment the scrapPages() method after scraping from the website.&#10;App is now fully functional but need some design improvements." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added patch to the error while scraping from using .index method.&#10;Changed the site from where meaning is being scraped.&#10;Added some codes more.&#10;Comment the scrapPages() method after scraping from the website.&#10;App is now fully functional but need some design improvements." />
+    <MESSAGE value="Added splash Screen but have not implemented progress bar in it&#10;Added icons to the application" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added splash Screen but have not implemented progress bar in it&#10;Added icons to the application" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -371,11 +387,46 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/mainWindow_ui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="697">
+          <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="23" selection-end-line="41" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialog_ui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" column="80" lean-forward="true" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/execute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/execute.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#25#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/PerWordWindow.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="357">
           <caret line="21" column="25" lean-forward="false" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -383,7 +434,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="24" lean-forward="true" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -401,7 +451,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="612">
           <caret line="42" column="23" lean-forward="false" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -419,7 +468,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="31" lean-forward="true" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -437,7 +485,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="11" column="25" lean-forward="true" selection-start-line="11" selection-start-column="25" selection-end-line="11" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -455,7 +502,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="0" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -544,38 +590,36 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="24" lean-forward="false" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dialog_ui.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="55" column="80" lean-forward="true" selection-start-line="55" selection-start-column="8" selection-end-line="55" selection-end-column="80" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PerWordWindow.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-374">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+        <state relative-caret-position="374">
+          <caret line="45" column="44" lean-forward="false" selection-start-line="45" selection-start-column="44" selection-end-line="45" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dialog_ui.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1054">
+          <caret line="62" column="80" lean-forward="false" selection-start-line="62" selection-start-column="8" selection-end-line="62" selection-end-column="80" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/mainWindow_ui.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="224">
-          <caret line="39" column="23" lean-forward="false" selection-start-line="39" selection-start-column="23" selection-end-line="39" selection-end-column="23" />
+        <state relative-caret-position="697">
+          <caret line="41" column="23" lean-forward="false" selection-start-line="41" selection-start-column="23" selection-end-line="41" selection-end-column="23" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/execute.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="292">
-          <caret line="314" column="22" lean-forward="true" selection-start-line="314" selection-start-column="22" selection-end-line="314" selection-end-column="22" />
+        <state relative-caret-position="17">
+          <caret line="190" column="46" lean-forward="false" selection-start-line="190" selection-start-column="46" selection-end-line="190" selection-end-column="46" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>

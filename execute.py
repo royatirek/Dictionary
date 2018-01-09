@@ -84,8 +84,8 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             while self.query.next():
                 # rec.counts returns no of columns in database
                 for ix in range(1):
-                    val = self.query.value(1) + "   ---    " + self.query.value(2)
-                    print(rec.fieldName(1), val)
+                    val = self.query.value(1).strip() + "   ---    " + self.query.value(2).strip()
+                    #print(rec.fieldName(1), val)
                     self.listWidget.addItem(val)
 
         else:
@@ -181,14 +181,14 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         query.prepare("INSERT INTO dictin (word, searchShortDefn, mnemonics, defArr, syn, hindi)"
                       "VALUES (:word, :searchShortDefn, :mnemonics, :defArr, :syn, :hindi)")
 
-        query.bindValue(":word", word)
-        query.bindValue(":searchShortDefn", searchShortDefn)
-        query.bindValue(":mnemonics", mnemonics)
+        query.bindValue(":word", word.strip())
+        query.bindValue(":searchShortDefn", searchShortDefn.strip())
+        query.bindValue(":mnemonics", mnemonics.strip())
         # defString is created using arguments defArr and defDict
         query.bindValue(":defArr", defString)
         # synListDB is the list of all the synonymes
         query.bindValue(":syn", str(synListDB))
-        query.bindValue(":hindi", hindi)
+        query.bindValue(":hindi", hindi.strip())
 
         if query.exec_():
             print("Successful")
