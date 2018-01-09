@@ -9,5 +9,5 @@ It scraps content from a dictionary website and gets the hindi translation from 
 I have not added the database file. I have used SQLite to create database.
 You can create your own database file by uncommenting the scrapPages() method under the __init__ method of class Dictionary in file execute.py.
 
-DocString has been wriiten and comments are given where necessary.
+DocString has been written and comments are given where necessary.
 
