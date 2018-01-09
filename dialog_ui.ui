@@ -42,7 +42,7 @@
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">font: 16pt &quot;Nirmala UI&quot;;
+    <string notr="true">font: 16pt &quot;Mangal&quot;;
 </string>
    </property>
    <property name="text">
@@ -67,46 +67,6 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>370</x>
-      <y>60</y>
-      <width>69</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 75 10pt &quot;MS Sans Serif&quot;;
-
-</string>
-    </property>
-    <item>
-     <property name="text">
-      <string>Hindi</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Bengali</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Telugu</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Tamil</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Gujarati</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QPushButton" name="voice">
     <property name="geometry">
      <rect>

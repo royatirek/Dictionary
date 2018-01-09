@@ -33,7 +33,7 @@ class Ui_Dialog(object):
         self.mainWord.setObjectName(_fromUtf8("mainWord"))
         self.hindi = QtGui.QLineEdit(Dialog)
         self.hindi.setGeometry(QtCore.QRect(10, 70, 351, 41))
-        self.hindi.setStyleSheet(_fromUtf8("font: 16pt \"Nirmala UI\";\n"
+        self.hindi.setStyleSheet(_fromUtf8("font: 16pt \"Mangal\";\n"
 ""))
         self.hindi.setReadOnly(True)
         self.hindi.setObjectName(_fromUtf8("hindi"))
@@ -42,17 +42,6 @@ class Ui_Dialog(object):
         self.frame.setFrameShape(QtGui.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtGui.QFrame.Raised)
         self.frame.setObjectName(_fromUtf8("frame"))
-        self.comboBox = QtGui.QComboBox(self.frame)
-        self.comboBox.setGeometry(QtCore.QRect(370, 60, 69, 41))
-        self.comboBox.setStyleSheet(_fromUtf8("font: 75 10pt \"MS Sans Serif\";\n"
-"\n"
-""))
-        self.comboBox.setObjectName(_fromUtf8("comboBox"))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
-        self.comboBox.addItem(_fromUtf8(""))
         self.voice = QtGui.QPushButton(self.frame)
         self.voice.setGeometry(QtCore.QRect(394, 10, 41, 41))
         self.voice.setObjectName(_fromUtf8("voice"))
@@ -75,11 +64,6 @@ class Ui_Dialog(object):
         Dialog.setWindowTitle(_translate("Dialog", "Dialog", None))
         self.mainWord.setText(_translate("Dialog", "DemoWord", None))
         self.hindi.setText(_translate("Dialog", "HindiWord", None))
-        self.comboBox.setItemText(0, _translate("Dialog", "Hindi", None))
-        self.comboBox.setItemText(1, _translate("Dialog", "Bengali", None))
-        self.comboBox.setItemText(2, _translate("Dialog", "Telugu", None))
-        self.comboBox.setItemText(3, _translate("Dialog", "Tamil", None))
-        self.comboBox.setItemText(4, _translate("Dialog", "Gujarati", None))
         self.voice.setText(_translate("Dialog", "voice", None))
         self.textEdit.setHtml(_translate("Dialog", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

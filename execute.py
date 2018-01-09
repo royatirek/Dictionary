@@ -3,7 +3,6 @@ from PyQt4.QtGui import *
 site_pack_path = "C:\\Python34\\Lib\\site-packages"
 QApplication.addLibraryPath('{0}\\PyQt4\\plugins'.format(site_pack_path))
 from PyQt4.QtSql import *
-from PyQt4.QtCore import *
 import sys
 from urllib.request import Request, urlopen
 from bs4 import BeautifulSoup
@@ -13,6 +12,7 @@ from PerWordWindow import PerWordDisplay
 
 # This  is how python inherits
 class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
+    """ This is the main class and provides the basis of creation of the main Window"""
     # class or instance variable
 
     db = QSqlDatabase.addDatabase('QSQLITE')
@@ -35,6 +35,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         self.listWidget.doubleClicked.connect(self.getPerWordDisplay)
 
     def getPerWordDisplay(self, item):
+        """This calls the PerWordWindow Dialog box and show each word in detail"""
         # type of the item  is QModelIndex
         currentRow = item.data()
         endOfWord = currentRow.index(" ")
@@ -53,10 +54,12 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         self.query.next()
 
         perWordObject = PerWordDisplay(self.query.value(1), self.query.value(2), self.query.value(3),
-                                       self.query.value(4), self.query.value(5))
+                                       self.query.value(4), self.query.value(5), self.query.value(6))
         perWordObject.exec_()
 
     def showSearchedWord(self):
+        """  This method shows the searched word """
+
         self.listWidget.clear()
         search_term = str(self.searchField.text())
         if self.query.exec_("SELECT * FROM dictin"):
@@ -74,7 +77,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             print(self.query.lastError().text())
 
     def showWords(self):
-
+        """This shows all the words present in the database"""
         if self.query.exec_("SELECT * FROM dictin"):
             rec = self.query.record()
             while self.query.next():
@@ -87,75 +90,91 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         else:
             print(self.query.lastError().text())
 
-    def getWordsAndInsert(self, word, searchShortDefn, mnemonics, defArr, defDict):
+    def getHindiTrans(self, word):
+        """ This scarps the hindi translation of word from the internet"""
+        url = "http://www.shabdkosh.com/hi/translate?e=" + word + "&l=hi"
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        web_byte = urlopen(req).read()
+        webpage = web_byte.decode('utf-8')
+        # print(webpage)
+        # using soup library
+        soup = BeautifulSoup(webpage, "html.parser")
+        try:
+            result = soup.find("a", class_='in l')
+            result = "".join(result.strings)
+        except(Exception):
+            result = "NONE"
 
+        print(result)
+        return result
+
+    def getWordsAndInsert(self, word, searchShortDefn, mnemonics, defArr, defDict):
+        """ This inserts the scrapped word and its contents in the database"""
         word = str(word)
         searchShortDefn = str(searchShortDefn)
         mnemonics = str(mnemonics)
-        defString=""
+        synListDB = []
+        defString = ""
         for i in range(len(defArr)):
-            defString=defString+"<u>Defination</u><br>"
-            defString+=defArr[i]+"<br><br>"
-            print(defArr[i],i)
-
+            defString = defString + "<u>Defination</u><br>"
+            defString += defArr[i] + "<br><br>"
+            print(defArr[i], i)
 
             synList = defDict[i]['syn']
+
             noOfSynonymes = len(synList)
             if (noOfSynonymes > 0):
+                synListDB.extend(synList)
                 defString += "<u>Synonymes</u><br>"
             if (noOfSynonymes > 0):
                 for j in range(noOfSynonymes):
-                   defString+=synList[j] + "<br>"
-
-
-
-
+                    defString += synList[j] + "<br>"
 
             sentenceList = defDict[i]['sent']
             noOfSentences = len(sentenceList)
             if (noOfSentences > 0):
                 defString += "<u>Example Sentences</u><br>"
-            if(noOfSentences>0):
+            if (noOfSentences > 0):
                 for j in range(noOfSentences):
-                    defString+=sentenceList[j] + "<br>"
+                    defString += sentenceList[j] + "<br>"
 
-            defString+="<br><hr><br>"
+            defString += "<br><hr><br>"
 
-        if mnemonics.index('///')>0:
-            noOfMnemonics=2
+        if mnemonics.index('///') > 0:
+            noOfMnemonics = 2
 
-
-        defString+="<u>Mnemonics</u><br><br>"
-        start=-3
+        defString += "<u>Mnemonics</u><br><br>"
+        start = -3
         for i in range(noOfMnemonics):
-            stop=mnemonics.index('///',start+3)
-            defString+=mnemonics[start+3:stop]+"<br>"
-            start=stop
-            defString+="<br>"
+            stop = mnemonics.index('///', start + 3)
+            defString += mnemonics[start + 3:stop] + "<br>"
+            start = stop
+            defString += "<br>"
 
-
-
-
-        print(defString)
+        hindi = self.getHindiTrans(word)
+        print(hindi)
         query = QSqlQuery()
 
         # establish placeholders for the data, these placeholders we fill in through bindValue()
-        query.prepare("""INSERT INTO dictin (word, searchShortDefn, mnemonics, defArr, defDict)
-                VALUES (:word, :searchShortDefn, :mnemonics, :defArr, :defDict)""")
+        query.prepare("INSERT INTO dictin (word, searchShortDefn, mnemonics, defArr, syn, hindi)"
+                      "VALUES (:word, :searchShortDefn, :mnemonics, :defArr, :syn, :hindi)")
 
         query.bindValue(":word", word)
         query.bindValue(":searchShortDefn", searchShortDefn)
         query.bindValue(":mnemonics", mnemonics)
-        query.bindValue(":defArr",defString)
-        query.bindValue(":defDict",defString)
+        # defString is created using arguments defArr and defDict
+        query.bindValue(":defArr", defString)
+        # synListDB is the list of all the synonymes
+        query.bindValue(":syn", str(synListDB))
+        query.bindValue(":hindi", hindi)
 
         if query.exec_():
             print("Successful")
         else:
-            print("Error: ", query.lastError().text())
+            print("Error1: ", query.lastError().text())
 
     def scrapPage(self, pageNo):
-
+        """ It scraps all the words and its related contents and send it to the getWordandInsert method"""
         url = "http://www.mnemonicdictionary.com/wordlist/GREwordlist?page=" + str(pageNo)
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         web_byte = urlopen(req).read()
@@ -234,16 +253,21 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
                 self.getWordsAndInsert(search_word, search_short_defn, mnemonics, def_arr, def_dict)
 
-                print(search_word ,"\n",search_short_defn, "\n",mnemonics, "\n",def_arr, "\n",def_dict)
+                print(search_word, "\n", search_short_defn, "\n", mnemonics, "\n", def_arr, "\n", def_dict)
 
                 tot = tot + 1
 
     def scrapPages(self):
+        """ This creates the database and scraps all the pages of the target website"""
+        print(self.query.exec_("PRAGMA encoding='UTF-8'"))
 
         print(self.query.exec_("CREATE TABLE dictin(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                                "word varchar(100), searchShortDefn varchar(300),mnemonics varchar(500), "
-                               "defArr varchar(2000), defDict varchar(500))"))
-
+                               "defArr varchar(2000), syn varchar(500), hindi nvarchar(200))"))
+        if self.query.exec_():
+            print("Successful")
+        else:
+            print("Error2: ", self.query.lastError().text())
         for i in range(1, 2):
             self.scrapPage(i)
 
