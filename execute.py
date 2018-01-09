@@ -25,7 +25,8 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
     # _init is initialiser
     def __init__(self):
 
-        self.scrapPages()
+        # Comment the below line if database is already created
+        #self.scrapPages()
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("TimeMac Dictionary")
@@ -92,7 +93,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
     def getHindiTrans(self, word):
         """ This scarps the hindi translation of word from the internet"""
-        url = "http://www.shabdkosh.com/hi/translate?e=" + word + "&l=hi"
+        url = "http://dict.hinkhoj.com/"+word+"-meaning-in-hindi.words"
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
         web_byte = urlopen(req).read()
         webpage = web_byte.decode('utf-8')
@@ -100,7 +101,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         # using soup library
         soup = BeautifulSoup(webpage, "html.parser")
         try:
-            result = soup.find("a", class_='in l')
+            result = soup.find("span", {"itemprop" : "itemListElement"})
             result = "".join(result.strings)
         except(Exception):
             result = "NONE"
@@ -140,13 +141,34 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
             defString += "<br><hr><br>"
 
-        if mnemonics.index('///') > 0:
-            noOfMnemonics = 2
+        # .index throws value error therefore try except block
+        try:
+            indexOfSeperater=mnemonics.index('///')
+        except(Exception):
+            indexOfSeperater=0
 
-        defString += "<u>Mnemonics</u><br><br>"
+        if indexOfSeperater > 0:
+            noOfMnemonics = 2
+        elif len(mnemonics)>0:
+            noOfMnemonics=1
+        else:
+            noOfMnemonics=0
+
+        if noOfMnemonics>0:
+            defString += "<u>Mnemonics</u><br><br>"
+
+
+
+        # Formatting mnemonic in defString
         start = -3
+
         for i in range(noOfMnemonics):
-            stop = mnemonics.index('///', start + 3)
+            # .index throws value error therefore try except block
+            try:
+                stop = mnemonics.index('///', start + 3)
+            except:
+                stop=len(mnemonics)
+
             defString += mnemonics[start + 3:stop] + "<br>"
             start = stop
             defString += "<br>"
@@ -268,7 +290,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             print("Successful")
         else:
             print("Error2: ", self.query.lastError().text())
-        for i in range(1, 2):
+        for i in range(1, 788):
             self.scrapPage(i)
 
 
