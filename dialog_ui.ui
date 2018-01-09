@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="icons/icons.qrc">
+    <normaloff>:/mw3.png</normaloff>:/mw3.png</iconset>
+  </property>
   <widget class="QLineEdit" name="mainWord">
    <property name="geometry">
     <rect>
@@ -77,7 +81,17 @@
      </rect>
     </property>
     <property name="text">
-     <string>voice</string>
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset resource="icons/icons.qrc">
+      <normaloff>:/v2.png</normaloff>:/v2.png</iconset>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>32</width>
+      <height>32</height>
+     </size>
     </property>
    </widget>
   </widget>
@@ -124,6 +138,8 @@ p, li { white-space: pre-wrap; }
    </widget>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons/icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

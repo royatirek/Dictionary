@@ -1,0 +1,10 @@
+<RCC>
+	<qresource>
+		<file>mw1.png</file>
+		<file>mw2.png</file>
+		<file>mw3.png</file>
+		<file>wm4.png</file>
+		<file>v1.png</file>
+		<file>v2.png</file>
+	</qresource>
+</RCC>

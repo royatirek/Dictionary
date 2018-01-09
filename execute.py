@@ -1,5 +1,5 @@
 from PyQt4.QtGui import *
-
+from PyQt4.QtCore import *
 site_pack_path = "C:\\Python34\\Lib\\site-packages"
 QApplication.addLibraryPath('{0}\\PyQt4\\plugins'.format(site_pack_path))
 from PyQt4.QtSql import *
@@ -294,8 +294,23 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             self.scrapPage(i)
 
 
+
+
+
 app = QApplication(sys.argv)
+
+# Create and display the splash screen
+splash_pix = QPixmap('splash.jpg')
+splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
+# adding progress bar
+progressBar = QProgressBar(splash)
+splash.setMask(splash_pix.mask())
+splash.show()
+
+
+
 
 newDict = Dictionary()
 newDict.show()
+splash.finish(newDict)
 app.exec_()
