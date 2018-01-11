@@ -25,8 +25,10 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
     # _init is initialiser
     def __init__(self):
 
+        self.createTable()
+
         # Comment the below line if database is already created
-        #self.scrapPages()
+        self.scrapPages()
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("TimeMac Dictionary")
@@ -82,7 +84,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         if self.query.exec_("SELECT * FROM dictin"):
             rec = self.query.record()
             while self.query.next():
-                # rec.counts returns no of columns in database
+                # rec.count returns no of columns in database
                 for ix in range(1):
                     val = self.query.value(1).strip() + "   ---    " + self.query.value(2).strip()
                     #print(rec.fieldName(1), val)
@@ -92,9 +94,9 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             print(self.query.lastError().text())
 
     def getHindiTrans(self, word):
-        """ This scarps the hindi translation of word from the internet"""
+        """ This scarps the hindi translation of word from the internet and returns its value"""
         url = "http://dict.hinkhoj.com/"+word+"-meaning-in-hindi.words"
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        req = Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41'})
         web_byte = urlopen(req).read()
         webpage = web_byte.decode('utf-8')
         # print(webpage)
@@ -279,19 +281,73 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
                 tot = tot + 1
 
-    def scrapPages(self):
-        """ This creates the database and scraps all the pages of the target website"""
+
+    def createTable(self):
         print(self.query.exec_("PRAGMA encoding='UTF-8'"))
 
         print(self.query.exec_("CREATE TABLE dictin(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                                "word varchar(100), searchShortDefn varchar(300),mnemonics varchar(500), "
                                "defArr varchar(2000), syn varchar(500), hindi nvarchar(200))"))
-        if self.query.exec_():
-            print("Successful")
-        else:
-            print("Error2: ", self.query.lastError().text())
-        for i in range(1, 788):
-            self.scrapPage(i)
+
+    def scrapPages(self):
+        """ This creates the database and scraps all the pages of the target website"""
+
+        # startAgain needs to be changed be scarping fails
+        startAgain = 1
+        lastStableID=self.getNoOfRows()
+
+        for i in range(startAgain, 788):
+            try:
+                self.scrapPage(i)
+            except Exception as exception:
+                print(type(exception).__name__)
+                print(str(exception))
+                print("Error occured while processing page ",i,
+                " : Rollback to last state\n")
+                currentID = self.getNoOfRows()
+                self.rollback(lastStableID+1,currentID+1)
+                print("Pages till ",i," are fully committed to database")
+
+                exit(0)
+
+            lastStableID=self.getNoOfRows()
+
+
+
+
+
+
+
+    def rollback(self,start,stop):
+        """ Rollbacks into previous full committed page"""
+        for i in range(start,stop):
+            deleteQuery = "DELETE FROM dictin WHERE id ="+str(i)
+            if self.query.exec_(deleteQuery):
+                print("DElETE Successfull")
+            else:
+                print(self.query.lastError)
+
+
+    def getNoOfRows(self):
+        if self.query.exec_("SELECT * FROM dictin"):
+            i = 0
+            while self.query.next():
+                i = i + 1
+
+        return i
+
+
+    def forTesting(self):
+
+        if self.query.exec_("SELECT * FROM dictin"):
+            rec = self.query.record()
+
+
+            i=0
+            while self.query.next():
+                i=i+1
+
+            print(i)
 
 
 
@@ -299,18 +355,18 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
 app = QApplication(sys.argv)
 
-# Create and display the splash screen
+"""# Create and display the splash screen
 splash_pix = QPixmap('splash.jpg')
 splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
 # adding progress bar
 progressBar = QProgressBar(splash)
 splash.setMask(splash_pix.mask())
 splash.show()
-
+ """
 
 
 
 newDict = Dictionary()
 newDict.show()
-splash.finish(newDict)
+#splash.finish(newDict)
 app.exec_()
