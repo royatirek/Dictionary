@@ -29,13 +29,14 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         self.createTable()
 
         # Comment the below line if database is already created
-        self.scrapPages()
+        #self.scrapPages()
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("TimeMac Dictionary")
         self.showWords()
         # when search button is clicked
         self.pushButton.clicked.connect(self.showSearchedWord)
+        self.searchField.textEdited.connect(self.showSearchedWord)
         self.listWidget.doubleClicked.connect(self.getPerWordDisplay)
         self.listWidget.itemClicked.connect(self.showMessage)
 
@@ -60,31 +61,37 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         else:
             print("Error: ", self.query.lastError().text())
 
-        rec = self.query.record()
+
         self.query.next()
 
         perWordObject = PerWordDisplay(self.query.value(1), self.query.value(2), self.query.value(3),
                                        self.query.value(4), self.query.value(5), self.query.value(6))
         perWordObject.exec_()
 
+
+
     def showSearchedWord(self):
-        """  This method shows the searched word """
+        """  This method shows the searched word on keyboard click"""
 
         self.listWidget.clear()
-        search_term = str(self.searchField.text())
-        if self.query.exec_("SELECT * FROM dictin"):
-            rec = self.query.record()
-            while self.query.next():
-                # rec.counts() returns no of columns in database
-                for ix in range(1):
-                    wordSearched = self.query.value(1)
-                    if search_term in wordSearched:
-                        val = wordSearched + "   ---    " + self.query.value(2)
-                        print(rec.fieldName(1), val)
-                        self.listWidget.addItem(val)
+        search_term = '%'+str(self.searchField.text())+'%'
 
+        # Limits the query to 30
+        self.query.prepare("""SELECT * FROM dictin WHERE word LIKE :word LIMIT 30""")
+
+        self.query.bindValue(":word", search_term)
+
+        if self.query.exec_():
+            pass
         else:
-            print(self.query.lastError().text())
+            print("Error: ", self.query.lastError().text())
+
+        rec = self.query.record()
+        while self.query.next():
+            for ix in range(1):
+                val = str(self.query.value(1)) + "   ---    " + str(self.query.value(2))
+                #print(rec.fieldName(1), val)
+                self.listWidget.addItem(val)
 
     def showWords(self):
         """This shows all the words present in the database"""
@@ -93,7 +100,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             while self.query.next():
                 # rec.count returns no of columns in database
                 for ix in range(1):
-                    val = self.query.value(1).strip() + "   ---    " + self.query.value(6).strip()
+                    val = self.query.value(1).strip() + "   ---    " + self.query.value(2).strip()
                     #print(rec.fieldName(1), val)
                     self.listWidget.addItem(val)
 
@@ -300,10 +307,10 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         """ This creates the database and scraps all the pages of the target website"""
 
         # startAgain needs to be changed be scarping fails
-        startAgain = 1
+        startAgainFrom = 529
         lastStableID=self.getNoOfRows()
 
-        for i in range(startAgain, 788):
+        for i in range(startAgainFrom, 788):
             try:
                 self.scrapPage(i)
             except TypeError:
