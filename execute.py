@@ -26,7 +26,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
     # _init is initialiser
     def __init__(self):
 
-        self.createTable()
+        #self.createTable()
 
         # Comment the below line if database is already created
         #self.scrapPages()
@@ -108,7 +108,10 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             print(self.query.lastError().text())
 
     def getHindiTrans(self, word):
-        """ This scarps the hindi translation of word from the internet and returns its value"""
+        """ This scarps the hindi translation of word from the internet
+
+            Returns the hindi meaning
+        """
         url = "http://dict.hinkhoj.com/"+word+"-meaning-in-hindi.words"
         req = Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41'})
         web_byte = urlopen(req).read()
@@ -297,6 +300,9 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
 
     def createTable(self):
+        """This creates the table and this function needs to be commneted
+        from __init__ of Dictionary class when table gets created.
+        """
         print(self.query.exec_("PRAGMA encoding='UTF-8'"))
 
         print(self.query.exec_("CREATE TABLE dictin(ID INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -338,7 +344,11 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
 
     def rollback(self,start,stop):
-        """ Rollbacks into previous full committed page"""
+        """ Rollbacks into previous full committed page
+
+            Arguments - takes the start and the end index from where
+            text has to be deleted
+        """
         for i in range(start,stop):
             deleteQuery = "DELETE FROM dictin WHERE id ="+str(i)
             if self.query.exec_(deleteQuery):
@@ -348,6 +358,10 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
 
     def getNoOfRows(self):
+        """ Gets the no of rows in the database
+
+            Returns the no of rows in database
+        """
         if self.query.exec_("SELECT * FROM dictin"):
             i = 0
             while self.query.next():
@@ -357,6 +371,8 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
 
     def forTesting(self):
+        """ This is just for testing purposr
+        """
 
         if self.query.exec_("SELECT * FROM dictin"):
             rec = self.query.record()
