@@ -1,5 +1,6 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
+import traceback
 site_pack_path = "C:\\Python34\\Lib\\site-packages"
 QApplication.addLibraryPath('{0}\\PyQt4\\plugins'.format(site_pack_path))
 from PyQt4.QtSql import *
@@ -36,6 +37,12 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         # when search button is clicked
         self.pushButton.clicked.connect(self.showSearchedWord)
         self.listWidget.doubleClicked.connect(self.getPerWordDisplay)
+        self.listWidget.itemClicked.connect(self.showMessage)
+
+
+    def showMessage(self):
+         self.statusbar.showMessage("[Double click to expand]")
+
 
     def getPerWordDisplay(self, item):
         """This calls the PerWordWindow Dialog box and show each word in detail"""
@@ -86,7 +93,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             while self.query.next():
                 # rec.count returns no of columns in database
                 for ix in range(1):
-                    val = self.query.value(1).strip() + "   ---    " + self.query.value(2).strip()
+                    val = self.query.value(1).strip() + "   ---    " + self.query.value(6).strip()
                     #print(rec.fieldName(1), val)
                     self.listWidget.addItem(val)
 
@@ -117,7 +124,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         searchShortDefn = str(searchShortDefn)
         mnemonics = str(mnemonics)
         synListDB = []
-        defString = ""
+        defString = "<u>Short Meaning</u><br>"+searchShortDefn+"<br><br>"
         for i in range(len(defArr)):
             defString = defString + "<u>Defination</u><br>"
             defString += defArr[i] + "<br><br>"
@@ -299,15 +306,20 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         for i in range(startAgain, 788):
             try:
                 self.scrapPage(i)
+            except TypeError:
+                # When  word['class'] != [u'row-fluid']: in scrapPage method raises the error
+                print("TypeError caught")
+                pass
             except Exception as exception:
                 print(type(exception).__name__)
                 print(str(exception))
+                print(traceback.format_exc())
                 print("Error occured while processing page ",i,
                 " : Rollback to last state\n")
                 currentID = self.getNoOfRows()
                 self.rollback(lastStableID+1,currentID+1)
                 print("Pages till ",i," are fully committed to database")
-
+                print("No of words -> ",lastStableID)
                 exit(0)
 
             lastStableID=self.getNoOfRows()
