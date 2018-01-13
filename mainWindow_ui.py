@@ -44,6 +44,7 @@ class Ui_MainWindow(object):
         self.searchField.setGeometry(QtCore.QRect(20, 10, 421, 31))
         self.searchField.setObjectName(_fromUtf8("searchField"))
         self.searchField.setStyleSheet(_fromUtf8("font: 12pt \"MS Shell Dlg 2\";"))
+        self.searchField.setPlaceholderText("Search for Meanings")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 568, 21))

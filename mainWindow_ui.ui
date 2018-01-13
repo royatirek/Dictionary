@@ -62,6 +62,9 @@
     <property name="styleSheet">
      <string notr="true">font: 12pt &quot;MS Shell Dlg 2&quot;;</string>
     </property>
+    <property name="placeholderText">
+     <string>Search for Meaning</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

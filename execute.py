@@ -1,6 +1,7 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 import traceback
+
 site_pack_path = "C:\\Python34\\Lib\\site-packages"
 QApplication.addLibraryPath('{0}\\PyQt4\\plugins'.format(site_pack_path))
 from PyQt4.QtSql import *
@@ -26,10 +27,10 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
     # _init is initialiser
     def __init__(self):
 
-        #self.createTable()
+        # self.createTable()
 
         # Comment the below line if database is already created
-        #self.scrapPages()
+        # self.scrapPages()
         QMainWindow.__init__(self)
         self.setupUi(self)
         self.setWindowTitle("TimeMac Dictionary")
@@ -37,13 +38,11 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         # when search button is clicked
         self.pushButton.clicked.connect(self.showSearchedWord)
         self.searchField.textEdited.connect(self.showSearchedWord)
-        self.listWidget.doubleClicked.connect(self.getPerWordDisplay)
-        self.listWidget.itemClicked.connect(self.showMessage)
-
+        self.listWidget.clicked.connect(self.getPerWordDisplay)
+        self.listWidget.clicked.connect(self.showMessage)
 
     def showMessage(self):
-         self.statusbar.showMessage("[Double click to expand]")
-
+        self.statusbar.showMessage("[Click on word to expand]")
 
     def getPerWordDisplay(self, item):
         """This calls the PerWordWindow Dialog box and show each word in detail"""
@@ -61,20 +60,17 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         else:
             print("Error: ", self.query.lastError().text())
 
-
         self.query.next()
 
         perWordObject = PerWordDisplay(self.query.value(1), self.query.value(2), self.query.value(3),
                                        self.query.value(4), self.query.value(5), self.query.value(6))
         perWordObject.exec_()
 
-
-
     def showSearchedWord(self):
         """  This method shows the searched word on keyboard click"""
 
         self.listWidget.clear()
-        search_term = '%'+str(self.searchField.text())+'%'
+        search_term = '%' + str(self.searchField.text()) + '%'
 
         # Limits the query to 30
         self.query.prepare("""SELECT * FROM dictin WHERE word LIKE :word LIMIT 30""")
@@ -90,7 +86,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         while self.query.next():
             for ix in range(1):
                 val = str(self.query.value(1)) + "   ---    " + str(self.query.value(2))
-                #print(rec.fieldName(1), val)
+                # print(rec.fieldName(1), val)
                 self.listWidget.addItem(val)
 
     def showWords(self):
@@ -101,7 +97,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
                 # rec.count returns no of columns in database
                 for ix in range(1):
                     val = self.query.value(1).strip() + "   ---    " + self.query.value(2).strip()
-                    #print(rec.fieldName(1), val)
+                    # print(rec.fieldName(1), val)
                     self.listWidget.addItem(val)
 
         else:
@@ -112,15 +108,16 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
             Returns the hindi meaning
         """
-        url = "http://dict.hinkhoj.com/"+word+"-meaning-in-hindi.words"
-        req = Request(url, headers={'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41'})
+        url = "http://dict.hinkhoj.com/" + word + "-meaning-in-hindi.words"
+        req = Request(url, headers={
+            'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41'})
         web_byte = urlopen(req).read()
         webpage = web_byte.decode('utf-8')
         # print(webpage)
         # using soup library
         soup = BeautifulSoup(webpage, "html.parser")
         try:
-            result = soup.find("span", {"itemprop" : "itemListElement"})
+            result = soup.find("span", {"itemprop": "itemListElement"})
             result = "".join(result.strings)
         except(Exception):
             result = "NONE"
@@ -134,7 +131,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         searchShortDefn = str(searchShortDefn)
         mnemonics = str(mnemonics)
         synListDB = []
-        defString = "<u>Short Meaning</u><br>"+searchShortDefn+"<br><br>"
+        defString = "<u>Short Meaning</u><br>" + searchShortDefn + "<br><br>"
         for i in range(len(defArr)):
             defString = defString + "<u>Defination</u><br>"
             defString += defArr[i] + "<br><br>"
@@ -162,21 +159,19 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
         # .index throws value error therefore try except block
         try:
-            indexOfSeperater=mnemonics.index('///')
+            indexOfSeperater = mnemonics.index('///')
         except(Exception):
-            indexOfSeperater=0
+            indexOfSeperater = 0
 
         if indexOfSeperater > 0:
             noOfMnemonics = 2
-        elif len(mnemonics)>0:
-            noOfMnemonics=1
+        elif len(mnemonics) > 0:
+            noOfMnemonics = 1
         else:
-            noOfMnemonics=0
+            noOfMnemonics = 0
 
-        if noOfMnemonics>0:
+        if noOfMnemonics > 0:
             defString += "<u>Mnemonics</u><br><br>"
-
-
 
         # Formatting mnemonic in defString
         start = -3
@@ -186,7 +181,7 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
             try:
                 stop = mnemonics.index('///', start + 3)
             except:
-                stop=len(mnemonics)
+                stop = len(mnemonics)
 
             defString += mnemonics[start + 3:stop] + "<br>"
             start = stop
@@ -298,7 +293,6 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
                 tot = tot + 1
 
-
     def createTable(self):
         """This creates the table and this function needs to be commneted
         from __init__ of Dictionary class when table gets created.
@@ -313,8 +307,8 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         """ This creates the database and scraps all the pages of the target website"""
 
         # startAgain needs to be changed be scarping fails
-        startAgainFrom = 529
-        lastStableID=self.getNoOfRows()
+        startAgainFrom = 532
+        lastStableID = self.getNoOfRows()
 
         for i in range(startAgainFrom, 788):
             try:
@@ -327,35 +321,28 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
                 print(type(exception).__name__)
                 print(str(exception))
                 print(traceback.format_exc())
-                print("Error occured while processing page ",i,
-                " : Rollback to last state\n")
+                print("Error occured while processing page ", i,
+                      " : Rollback to last state\n")
                 currentID = self.getNoOfRows()
-                self.rollback(lastStableID+1,currentID+1)
-                print("Pages till ",i," are fully committed to database")
-                print("No of words -> ",lastStableID)
+                self.rollback(lastStableID + 1, currentID + 1)
+                print("Pages till ", i, " are fully committed to database")
+                print("No of words -> ", lastStableID)
                 exit(0)
 
-            lastStableID=self.getNoOfRows()
+            lastStableID = self.getNoOfRows()
 
-
-
-
-
-
-
-    def rollback(self,start,stop):
+    def rollback(self, start, stop):
         """ Rollbacks into previous full committed page
 
             Arguments - takes the start and the end index from where
             text has to be deleted
         """
-        for i in range(start,stop):
-            deleteQuery = "DELETE FROM dictin WHERE id ="+str(i)
+        for i in range(start, stop):
+            deleteQuery = "DELETE FROM dictin WHERE id =" + str(i)
             if self.query.exec_(deleteQuery):
                 print("DElETE Successfull")
             else:
                 print(self.query.lastError)
-
 
     def getNoOfRows(self):
         """ Gets the no of rows in the database
@@ -369,7 +356,6 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
 
         return i
 
-
     def forTesting(self):
         """ This is just for testing purposr
         """
@@ -377,31 +363,25 @@ class Dictionary(QMainWindow, mainWindow_ui.Ui_MainWindow, PerWordDisplay):
         if self.query.exec_("SELECT * FROM dictin"):
             rec = self.query.record()
 
-
-            i=0
+            i = 0
             while self.query.next():
-                i=i+1
+                i = i + 1
 
             print(i)
 
 
-
-
-
 app = QApplication(sys.argv)
 
-"""# Create and display the splash screen
+# Create and display the splash screen
 splash_pix = QPixmap('splash.jpg')
 splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
 # adding progress bar
 progressBar = QProgressBar(splash)
 splash.setMask(splash_pix.mask())
 splash.show()
- """
-
 
 
 newDict = Dictionary()
 newDict.show()
-#splash.finish(newDict)
+splash.finish(newDict)
 app.exec_()
