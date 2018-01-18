@@ -1,4 +1,4 @@
-## Dictionary
+## Dictionary [If I get more than 5 star, I will write complete documentation for it]
 A dictionary having features like pronunciation, mnemonics to learn words and translation into native Indian regional languages.<br>
 
 
